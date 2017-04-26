@@ -1,0 +1,24 @@
+# .gitignore
+# Erstmal alles ignorieren
+*
+# Verzeichnis /a/b/c/ "un-ignorieren"
+
+!.gitignore
+
+!main.cc
+
+!CTF_functions.h
+!vdb_functions.h
+!iso_functions.h
+
+!CTF_functions.cpp
+!vdb_functions.cpp
+!iso_functions.cpp
+
+!CTF_testsuite.h
+!vdb_testsuite.h
+!iso_testsuite.h
+
+!TestRunner.cpp
+
+!*/
