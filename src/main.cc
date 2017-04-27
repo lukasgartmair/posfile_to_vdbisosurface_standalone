@@ -175,7 +175,7 @@ int main()
   	std::vector<openvdb::Vec3I> triangles;
   	std::vector<openvdb::Vec4I> quads;	
 
-	float isovalue = 0.2;
+	float isovalue = 0.1;
 
 	openvdb::tools::volumeToMesh<openvdb::FloatGrid>(*calculation_result_grid, points, triangles, quads, isovalue);
 
@@ -196,16 +196,17 @@ int main()
 
 	// create a triangular mesh
 	double number_of_splitted_triangles = 2*quads.size();
-	std::vector<std::vector<float> > triangles_from_splitted_quads(number_of_splitted_triangles, std::vector<float>(xyzs));
+	std::vector<std::vector<unsigned int> > triangles_from_splitted_quads(number_of_splitted_triangles, std::vector<unsigned int>(xyzs));
 
 	triangles_from_splitted_quads = VDB::splitQuadsToTriangles(points, quads);
 
-	std::vector<std::vector<float> > triangles_combined;
+	std::vector<std::vector<unsigned int> > triangles_combined;
 	triangles_combined = VDB::concatenateTriangleVectors(triangles, triangles_from_splitted_quads);
 
 	std::cout << " active voxel count calculation_result_grid" << " = " << calculation_result_grid->activeVoxelCount() << std::endl;
 	std::cout << "points size vdb isosurface" << " = " << points.size() << std::endl;
 	std::cout << "triangles size vdb isosurface" << " = " << triangles.size() << std::endl;
+	std::cout << "quads size vdb isosurface" << " = " << quads.size() << std::endl;
 	
 	std::cout << " " << std::endl;
 	std::cout << "points size isosurface" << " = " << points.size() << std::endl;

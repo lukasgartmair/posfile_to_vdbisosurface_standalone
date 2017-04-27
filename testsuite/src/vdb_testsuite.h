@@ -12,6 +12,8 @@
 #include <algorithm>    // std::min
 
 using namespace VDB;
+
+const unsigned int xyzs = 3;
  
 class TestOpenVDB : public CppUnit::TestFixture {
 
@@ -24,7 +26,7 @@ public:
 
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test0 - Test the Test itsself",
 				&TestOpenVDB::testOpenVDB_TestTheTest ));
-			/*	
+			
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test1 - Division of Data1 small by big",
 				&TestOpenVDB::testOpenVDB_DivisionOfData1 ));
 				
@@ -75,7 +77,7 @@ public:
 
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test17 - export triangles to obj ",
 				&TestOpenVDB::testOpenVDB_ExportTriangles));
-
+	/*
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test18 - active / inactive voxels ",
 				&TestOpenVDB::testOpenVDB_ActiveInactiveVoxels));
 
@@ -485,7 +487,7 @@ protected:
 		float adaptivity=0;
 		openvdb::tools::volumeToMesh<openvdb::FloatGrid>(*grid, points, triangles, quads, isovalue, adaptivity);
 
-		std::vector<std::vector<float> > triangles_from_splitted_quads;
+		std::vector<std::vector<unsigned int> > triangles_from_splitted_quads;
 
 		//triangles_from_splitted_quads = splitQuadsToTriangles(points, quads);
 		
@@ -494,11 +496,11 @@ protected:
 		//CPPUNIT_ASSERT_EQUAL(quads.size()*2,triangles_from_splitted_quads.size());
 		
 		// faces outputs from openvdb volume to mesh starting from zero!
-		int minimum  = 20;
-		int minimum_tris = 20;
-		for (int i=0;i<triangles.size();i++)
+		unsigned int minimum  = 20;
+		unsigned int minimum_tris = 20;
+		for (unsigned int i=0;i<triangles.size();i++)
 		{
-			for (int j=0;j<3;j++)
+			for (unsigned int j=0;j<3;j++)
 			{
 				if (triangles[i][j] < minimum)
 				{
@@ -507,10 +509,10 @@ protected:
 			}
 		}
 		
-		int minimum_quads = 20;
-		for (int i=0;i<quads.size();i++)
+		unsigned int minimum_quads = 20;
+		for (unsigned int i=0;i<quads.size();i++)
 		{
-			for (int j=0;j<3;j++)
+			for (unsigned int j=0;j<3;j++)
 			{
 				if (quads[i][j] < minimum_quads)
 				{
@@ -528,7 +530,7 @@ protected:
 			minimum = minimum_quads;
 		}
 
-		const int assert_faces_minimum = 0;
+		unsigned int assert_faces_minimum = 0;
 		CPPUNIT_ASSERT_EQUAL(assert_faces_minimum, minimum);
 
 	
@@ -562,9 +564,7 @@ protected:
 		CPPUNIT_ASSERT_EQUAL(2,tri_size);
 		
 		//check the contents
-		
-		int xyzs = 3;
-		std::vector<std::vector<float> > assert_triangles(tri_size, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > assert_triangles(tri_size, std::vector<unsigned int>(xyzs));
 		
 		assert_triangles[0][0] = 0; 
 		assert_triangles[0][1] = 1; 
@@ -595,10 +595,10 @@ protected:
 		float adaptivity=0.5;
 		openvdb::tools::volumeToMesh<openvdb::FloatGrid>(*grid, points, triangles, quads, isovalue, adaptivity);
 
-		std::vector<std::vector<float> > triangles_from_splitted_quads;
+		std::vector<std::vector<unsigned int> > triangles_from_splitted_quads;
 		triangles_from_splitted_quads = splitQuadsToTriangles(points, quads);
 		
-		std::vector<std::vector<float> > triangles_combined;
+		std::vector<std::vector<unsigned int> > triangles_combined;
 		
 		triangles_combined = concatenateTriangleVectors(triangles, triangles_from_splitted_quads);
 		
@@ -631,9 +631,8 @@ protected:
 	}
 	void testOpenVDB_IncreaseTrianglesVertexIndices()
 	{
-		int tri_size = 2;
-		int xyzs = 3;
-		std::vector<std::vector<float> > triangles(tri_size, std::vector<float>(xyzs));
+		unsigned int tri_size = 2;
+		std::vector<std::vector<unsigned int> > triangles(tri_size, std::vector<unsigned int>(xyzs));
 	
 		triangles[0][0] = 0; 
 		triangles[0][1] = 1; 
@@ -642,7 +641,7 @@ protected:
 		triangles[1][1] = 2; 
 		triangles[1][2] = 3; 	
 
-		std::vector<std::vector<float> > assert_triangles(tri_size, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > assert_triangles(tri_size, std::vector<unsigned int>(xyzs));
 		
 		assert_triangles[0][0] = 1; 
 		assert_triangles[0][1] = 2; 
@@ -651,7 +650,7 @@ protected:
 		assert_triangles[1][1] = 3; 
 		assert_triangles[1][2] = 4; 
 		
-		std::vector<std::vector<float> > result_triangles(tri_size, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > result_triangles(tri_size, std::vector<unsigned int>(xyzs));
 		int N = 1;
 		result_triangles = IncreaseTriangleVertexIndicesByN(triangles, N);
 		
@@ -668,7 +667,7 @@ protected:
 	{
 		int tri_size = 2;
 		int xyzs = 3;
-		std::vector<std::vector<float> > triangles(tri_size, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > triangles(tri_size, std::vector<unsigned int>(xyzs));
 	
 		triangles[0][0] = 1; 
 		triangles[0][1] = 2; 
@@ -677,7 +676,7 @@ protected:
 		triangles[1][1] = 3; 
 		triangles[1][2] = 4; 	
 
-		std::vector<std::vector<float> > assert_triangles(tri_size, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > assert_triangles(tri_size, std::vector<unsigned int>(xyzs));
 		
 		assert_triangles[0][0] = 0; 
 		assert_triangles[0][1] = 1; 
@@ -686,7 +685,7 @@ protected:
 		assert_triangles[1][1] = 2; 
 		assert_triangles[1][2] = 3; 
 		
-		std::vector<std::vector<float> > result_triangles(tri_size, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > result_triangles(tri_size, std::vector<unsigned int>(xyzs));
 		int N = 1;
 		result_triangles = DecreaseTriangleVertexIndicesByN(triangles, N);
 		
@@ -704,7 +703,7 @@ protected:
 
 		int tri_size = 2;
 		int xyzs = 3;
-		std::vector<std::vector<float> > triangles(tri_size, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > triangles(tri_size, std::vector<unsigned int>(xyzs));
 		
 		triangles[0][0] = 0; 
 		triangles[0][1] = 1; 
@@ -792,7 +791,7 @@ protected:
 		// both zs == 0 i.e. the triangle is parallel to xy plane
 		// normal should be 001
 		
-		std::vector<std::vector<float> > triangle(1, std::vector<float>(xyzs));
+		std::vector<std::vector<unsigned int> > triangle(1, std::vector<unsigned int>(xyzs));
 		triangle[0][0] = 1; 
 		triangle[0][1] = 2; 
 		triangle[0][2] = 0; 
@@ -868,10 +867,10 @@ protected:
 		openvdb::tools::volumeToMesh<openvdb::FloatGrid>(*grid, points, triangles, quads, isovalue, adaptivity);
 
 
-		std::vector<std::vector<float> > triangles_from_splitted_quads;
+		std::vector<std::vector<unsigned int> > triangles_from_splitted_quads;
 		triangles_from_splitted_quads = splitQuadsToTriangles(points, quads);
 		
-		std::vector<std::vector<float> > triangles_combined;
+		std::vector<std::vector<unsigned int> > triangles_combined;
 		
 		triangles_combined = concatenateTriangleVectors(triangles, triangles_from_splitted_quads);
 
@@ -898,10 +897,10 @@ protected:
 		float adaptivity=0;
 		openvdb::tools::volumeToMesh<openvdb::FloatGrid>(*grid, points, triangles, quads, isovalue, adaptivity);
 
-		std::vector<std::vector<float> > triangles_from_splitted_quads;
+		std::vector<std::vector<unsigned int> > triangles_from_splitted_quads;
 		triangles_from_splitted_quads = splitQuadsToTriangles(points, quads);
 		
-		std::vector<std::vector<float> > triangles_combined;
+		std::vector<std::vector<unsigned int> > triangles_combined;
 		
 		triangles_combined = concatenateTriangleVectors(triangles, triangles_from_splitted_quads);
 

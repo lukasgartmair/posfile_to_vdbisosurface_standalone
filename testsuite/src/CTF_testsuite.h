@@ -17,7 +17,7 @@
 
 
 template <typename T>
-bool compareVectors(std::vector<T> a, std::vector<T> b)
+bool compareVectors(std::vector<T> &a, std::vector<T> &b)
 {
 
     const double EPSILON = 0.001;
