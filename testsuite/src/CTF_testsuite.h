@@ -14,23 +14,29 @@
 #include <vector>
 #include <algorithm>
 
-
+bool dequals(const double &a, const double &b)
+{
+	return !(std::fabs(a-b)>std::numeric_limits<double>::epsilon());
+}
 
 template <typename T>
 bool compareVectors(std::vector<T> &a, std::vector<T> &b)
 {
-
-    const double EPSILON = 0.001;
     bool are_equal = true;
-    for (int i = 0; i < a.size(); i++){
+    for (int i = 0; i < a.size();++i){
 
-    	if ((fabs(a[i] - b[i])) > EPSILON){
+    	if (dequals(a[i],b[i])){
         	are_equal = false;
                 break;
                	}
     }
     return are_equal;
 }
+
+const unsigned int xyzs = 3;
+const unsigned int number_of_subvolumes = 8;
+const unsigned int number_of_subcuboids = 8;
+const unsigned int number_of_vertices = 8;
 
 class TestCTF : public CppUnit::TestFixture {
 
@@ -42,6 +48,9 @@ public:
  
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test0 - Test the Test itsself",
 				&TestCTF::testCTF_TestTheTest ));
+
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test0.5 - Test double equality",
+				&TestCTF::testCTF_TestDoubleEquality ));
 				
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test1 - Calculate Subvolumes of a unit cubes eight subcuboids",
 				&TestCTF::testCTF_CalculateSubvolumes));
@@ -52,13 +61,13 @@ public:
 
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test3 - Project Atom Position to unit voxel",
 				&TestCTF::testCTF_ProjectAtompositionToUnitvoxel));
-/*
+
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test4 - Determine Adjacent Voxel Vertices",
 				&TestCTF::testCTF_DetermineAdjacentVoxelVertices));
 
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test6 - Hellman sawtooth contributions",
 				&TestCTF::testCTF_HellmanSawtoothContributions));
-*/
+
 
 
 				
@@ -79,11 +88,25 @@ protected:
 		int u = x + z;
 		CPPUNIT_ASSERT_EQUAL(3, u);
 	}
+
+	void testCTF_TestDoubleEquality()
+	{
+
+		const double d1 {4.3};
+		const double d2 {4.3};
+
+		bool same = dequals(d1,d2);
+
+		CPPUNIT_ASSERT(same);
+
+
+
+
+	}
 	
 	void testCTF_CalculateSubvolumes() 
 	{	
-		const unsigned int xyzs = 3;
-		const unsigned int number_of_subvolumes = 8;
+
 		// initial atom position
 		std::vector<double> atom_position(xyzs);
 		std::fill(atom_position.begin(), atom_position.end(),0.5);
@@ -92,6 +115,12 @@ protected:
 	
 		std::vector<double> assertion_subvolumes(number_of_subvolumes);
 		std::fill(assertion_subvolumes.begin(), assertion_subvolumes.end(),0.125);
+
+		for (auto &elem : volumes_of_subcuboids){
+
+			std::cout << elem << std::endl;
+
+		}
 
 		bool assertion_equal = false;
 		assertion_equal = compareVectors(assertion_subvolumes, volumes_of_subcuboids);
@@ -115,7 +144,6 @@ protected:
 	
 	void testCTF_CalculateVoxelContributions() 
 	{	
-		const unsigned int number_of_subvolumes = 8;
 		std::vector<double> test_subvolumes(number_of_subvolumes); 
 		std::fill(test_subvolumes.begin(), test_subvolumes.end(),0.125);
 		
@@ -150,7 +178,6 @@ protected:
 	
 	void testCTF_ProjectAtompositionToUnitvoxel()
 	{
-		const unsigned int xyzs = 3;
 		std::vector<double> atom_position {0.5, 0.5, 0.5};
 		std::vector<double> unit_position(xyzs);
 		double voxel_size = 1;
@@ -302,8 +329,7 @@ protected:
 		// positive atom position
 		std::vector<double>atom_position {2.5, 2.5, 2.5};
 		double voxel_size = 1;
-		const unsigned int number_of_vertices = 8;
-		const unsigned int xyzs = 3;
+
 		std::vector<std::vector<double> > assert_voxel_vertices = CTF::initializeCubeVertices(2,2,2);
 		
 		std::vector<std::vector<double> > surr_voxel_vertices = CTF::determineAdjacentVoxelVertices(atom_position, voxel_size);
@@ -454,10 +480,6 @@ protected:
 	// alternative ctf from http://nucapt.northwestern.edu/refbase/files/UM_95_199.pdf
 	// the contribution is the volume of the opposing subcuboid divided by the total volume
 
-		
-
-		const unsigned int number_of_subcuboids = 8;
-		const unsigned int xyzs = 3;
 		double voxel_size =  1;
 		std::vector<double> volumes_of_subcuboids(number_of_subcuboids);
 		std::vector<double> vertex_contributions(number_of_subcuboids);

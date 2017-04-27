@@ -12,8 +12,6 @@
 #include <algorithm>    // std::min
 
 using namespace VDB;
-
-const unsigned int xyzs = 3;
  
 class TestOpenVDB : public CppUnit::TestFixture {
 
@@ -26,7 +24,7 @@ public:
 
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test0 - Test the Test itsself",
 				&TestOpenVDB::testOpenVDB_TestTheTest ));
-			
+/*			
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test1 - Division of Data1 small by big",
 				&TestOpenVDB::testOpenVDB_DivisionOfData1 ));
 				
@@ -77,7 +75,7 @@ public:
 
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test17 - export triangles to obj ",
 				&TestOpenVDB::testOpenVDB_ExportTriangles));
-	/*
+	
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test18 - active / inactive voxels ",
 				&TestOpenVDB::testOpenVDB_ActiveInactiveVoxels));
 
