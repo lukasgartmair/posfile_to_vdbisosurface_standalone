@@ -16,6 +16,8 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/io/loadPolygonFileOBJ.h>
 
  
 class TestIso : public CppUnit::TestFixture {
@@ -149,6 +151,24 @@ protected:
 		CPPUNIT_ASSERT_EQUAL(assert_ones,one_counter);
 
 
+
+	}
+
+
+	void testIso_visualizeMesh(){
+
+		pcl::PolygonMesh mesh;
+		pcl::io::loadPolygonFileOBJ("3depict_triangle_isosurface_mesh.obj",mesh);
+
+		boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+		viewer->setBackgroundColor (0, 0, 0);
+		viewer->addPolygonMesh(mesh,"meshes",0);
+		viewer->addCoordinateSystem (1.0);
+		viewer->initCameraParameters ();
+		while (!viewer->wasStopped ()){
+		    viewer->spinOnce (100);
+		    boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+}
 
 	}
 
