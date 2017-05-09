@@ -22,100 +22,93 @@ public:
 		CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite("TestOpenVDB");
  
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test0 - Test the Test itsself",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - Test the Test itsself",
 				&TestOpenVDB::testOpenVDB_TestTheTest ));
-/*			
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test1 - Division of Data1 small by big",
+		
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - Division of Data1 small by big",
 				&TestOpenVDB::testOpenVDB_DivisionOfData1 ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test2 - Division of Data2 big by small",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - Division of Data2 big by small",
 				&TestOpenVDB::testOpenVDB_DivisionOfData2 ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test3 - Division of Data3 misc",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - Division of Data3 misc",
 				&TestOpenVDB::testOpenVDB_DivisionOfData3 ));
 		
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test4 - Division of Data4 misc",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - Division of Data4 misc",
 				&TestOpenVDB::testOpenVDB_DivisionOfData4 ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test5 - Volume to mesh DMC",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - Volume to mesh DMC",
 				&TestOpenVDB::testOpenVDB_VolumeToMeshDMC ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test6 - round up ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - round up ",
 				&TestOpenVDB::testOpenVDB_RoundUp ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test7 - get voxel index ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - get voxel index ",
 				&TestOpenVDB::testOpenVDB_GetVoxelIndex ));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test8 - conversion openvdb vec3s to std::vec ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - conversion openvdb vec3s to std::vec ",
 				&TestOpenVDB::testOpenVDB_VectorConversion ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test9 - split openvdb quads to triangles ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - split openvdb quads to triangles ",
 				&TestOpenVDB::testOpenVDB_SplitQuadsToTriangles ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test10 - concatenate triangle lists ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - concatenate triangle lists ",
 				&TestOpenVDB::testOpenVDB_ConcatenateTriangles ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test11 - increase triangle vertex indices by n ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - increase triangle vertex indices by n ",
 				&TestOpenVDB::testOpenVDB_IncreaseTrianglesVertexIndices ));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test12 - decrease triangle vertex indices by n ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - decrease triangle vertex indices by n ",
 				&TestOpenVDB::testOpenVDB_DecreaseTrianglesVertexIndices ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test13 - compute vertex normals ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - compute vertex normals ",
 				&TestOpenVDB::testOpenVDB_ComputeVertexNormals ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test14 - compute triangle normals ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - compute triangle normals ",
 				&TestOpenVDB::testOpenVDB_ComputeTriangleNormals ));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test15 - bounding box ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - bounding box ",
 				&TestOpenVDB::testOpenVDB_BoundingBox));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test16 - triangle areas ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - triangle areas ",
 				&TestOpenVDB::testOpenVDB_TriangleAreas));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test17 - export triangles to obj ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - export triangles to obj ",
 				&TestOpenVDB::testOpenVDB_ExportTriangles));
 	
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test18 - active / inactive voxels ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - active / inactive voxels ",
 				&TestOpenVDB::testOpenVDB_ActiveInactiveVoxels));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test19 - get voxel coords ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - get voxel coords ",
 				&TestOpenVDB::testOpenVDB_GetVoxelCoords));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test20 - find coord in vector ",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - find coord in vector ",
 				&TestOpenVDB::testOpenVDB_FindCoordInVector));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test21 - signed distance field",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - signed distance field",
 				&TestOpenVDB::testOpenVDB_SignedDistanceField));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test22 - std::map creation",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - std::map creation",
 				&TestOpenVDB::testOpenVDB_StdMap));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test23 - sort",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - sort",
 				&TestOpenVDB::testOpenVDB_Sort));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test24 - shell assignement",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - shell assignement",
 				&TestOpenVDB::testOpenVDB_ShellAnalysis));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test25 - sdf reference change ",
-				&TestOpenVDB::testOpenVDB_SdfReferenceChange));
-
-
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test26 - whole ReferenceCycle of the prxoigram filter ",
-				&TestOpenVDB::testOpenVDB_ReferenceCycle));
-
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test32 - rearrange the proximitiy ranges",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - rearrange the proximitiy ranges",
 				&TestOpenVDB::testOpenVDB_RearrangeProximities));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test33 - voxel intersections",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - voxel intersections",
 				&TestOpenVDB::testOpenVDB_VoxelIntersections));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test34 - set proximity ranges",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - set proximity ranges",
 				&TestOpenVDB::testOpenVDB_SetProximityRanges));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test35 - new shell check",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestOpenVDB>("Test - new shell check",
 				&TestOpenVDB::testOpenVDB_ShellCheck));
-*/
+
 
 		return suiteOfTests;
 	}
@@ -414,7 +407,7 @@ protected:
 		coord test_coord = {0,0,0};
 		coord result_coord = {0,0,0};
 		float voxelsize = 3;
-		result_coord = GetVoxelIndex(&test_coord, voxelsize);
+		result_coord = getVoxelIndex(&test_coord, voxelsize);
 		coord assert_coord = {0,0,0};
 		CPPUNIT_ASSERT_EQUAL(result_coord.x, assert_coord.x);
 		CPPUNIT_ASSERT_EQUAL(result_coord.y, assert_coord.y);
@@ -423,7 +416,7 @@ protected:
 		test_coord = {12.5,-22,-3};
 		result_coord = {0,0,0};
 		voxelsize = 3;
-		result_coord = GetVoxelIndex(&test_coord, voxelsize);
+		result_coord = getVoxelIndex(&test_coord, voxelsize);
 		assert_coord = {4,-7,-1};
 		//std::cout << "x" << " = " << result_coord.x << std::endl; 
 		//std::cout << "y" << " = " << result_coord.y << std::endl; 
@@ -435,7 +428,7 @@ protected:
 		test_coord = {12.5,0.1,-3};
 		result_coord = {0,0,0};
 		voxelsize = 3;
-		result_coord = GetVoxelIndex(&test_coord, voxelsize);
+		result_coord = getVoxelIndex(&test_coord, voxelsize);
 		assert_coord = {4,0,-1};
 		//std::cout << "x" << " = " << result_coord.x << std::endl; 
 		//std::cout << "y" << " = " << result_coord.y << std::endl; 
@@ -650,7 +643,7 @@ protected:
 		
 		std::vector<std::vector<unsigned int> > result_triangles(tri_size, std::vector<unsigned int>(xyzs));
 		int N = 1;
-		result_triangles = IncreaseTriangleVertexIndicesByN(triangles, N);
+		result_triangles = increaseTriangleVertexIndicesByN(triangles, N);
 		
 		//check the contents
 		for (int i=0;i<tri_size;i++)
@@ -685,7 +678,7 @@ protected:
 		
 		std::vector<std::vector<unsigned int> > result_triangles(tri_size, std::vector<unsigned int>(xyzs));
 		int N = 1;
-		result_triangles = DecreaseTriangleVertexIndicesByN(triangles, N);
+		result_triangles = decreaseTriangleVertexIndicesByN(triangles, N);
 		
 		//check the contents
 		for (int i=0;i<tri_size;i++)
@@ -738,11 +731,11 @@ protected:
 
 		std::vector<std::vector<float> > triangle_normals;
 		
-		triangle_normals = ComputeTriangleNormalsVDB(points, triangles);
+		triangle_normals = computeTriangleNormalsVDB(points, triangles);
 	
 		std::vector<std::vector<float> > vertex_normals;
 	
-		vertex_normals = ComputeVertexNormals(triangles, points, triangle_normals);
+		vertex_normals = computeVertexNormals(triangles, points, triangle_normals);
 
 	
 		// check the amount
@@ -804,7 +797,7 @@ protected:
 		points[2][1] = 1.0;
 		points[2][2] = 0.0;
 		
-		normals = ComputeTriangleNormalsVDB(points, triangle);
+		normals = computeTriangleNormalsVDB(points, triangle);
 
 		CPPUNIT_ASSERT_DOUBLES_EQUAL(0, normals[0][0],0.01);
 		CPPUNIT_ASSERT_DOUBLES_EQUAL(0, normals[0][1],0.01);
@@ -824,7 +817,7 @@ protected:
 		std_points[2][1] = 1.0;
 		std_points[2][2] = 0.0;
 		
-		normals = ComputeTriangleNormals(std_points, triangle);
+		normals = computeTriangleNormals(std_points, triangle);
 
 		CPPUNIT_ASSERT_DOUBLES_EQUAL(0, normals[0][0],0.01);
 		CPPUNIT_ASSERT_DOUBLES_EQUAL(0, normals[0][1],0.01);
@@ -874,7 +867,7 @@ protected:
 
 
 		std::vector<float> triangle_areas(triangles_combined.size());
-		triangle_areas = ComputeTriangleAreas(points, triangles_combined);
+		triangle_areas = computeTriangleAreas(points, triangles_combined);
 		/*
 		std::cout << triangle_areas[0] << std::endl; 
 		std::cout << triangle_areas[0] << std::endl; 

@@ -48,26 +48,25 @@ public:
 	static CppUnit::Test *suite() {
 		CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite("TestCTF");
  
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test0 - Test the Test itsself",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Test the Test itsself",
 				&TestCTF::testCTF_TestTheTest ));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test0.5 - Test double equality",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Test double equality",
 				&TestCTF::testCTF_TestDoubleEquality ));
 				
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test1 - Calculate Subvolumes of a unit cubes eight subcuboids",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Calculate Subvolumes of a unit cubes eight subcuboids",
 				&TestCTF::testCTF_CalculateSubvolumes));
-	
 		
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test2 - Calculate Voxel Contributions",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Calculate Voxel Contributions",
 				&TestCTF::testCTF_CalculateVoxelContributions));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test3 - Project Atom Position to unit voxel",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Project Atom Position to unit voxel",
 				&TestCTF::testCTF_ProjectAtompositionToUnitvoxel));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test4 - Determine Adjacent Voxel Vertices",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Determine Adjacent Voxel Vertices",
 				&TestCTF::testCTF_DetermineAdjacentVoxelVertices));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test6 - Hellman sawtooth contributions",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Hellman sawtooth contributions",
 				&TestCTF::testCTF_HellmanSawtoothContributions));
 		
 		return suiteOfTests;

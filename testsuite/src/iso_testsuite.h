@@ -1,3 +1,5 @@
+#ifndef ISOTESTSUITE_H
+#define ISOTESTSUITE_H
 
 #include <iostream>
 #include <cppunit/TestFixture.h>
@@ -6,18 +8,13 @@
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestCase.h>
 
-#ifndef ISOTESTSUITE_H
-#define ISOTESTSUITE_H
 
-#include "iso_functions.h"
 #include "atomprobe/primitives/ionHit.h"
 #include "atomprobe/io/dataFiles.h"
 #include "atomprobe/io/ranges.h"
 #include <string>
 #include <vector>
 #include <typeinfo>
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/io/loadPolygonFileOBJ.h>
 
  
 class TestIso : public CppUnit::TestFixture {
@@ -28,19 +25,19 @@ public:
 	static CppUnit::Test *suite() {
 		CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite("Test iso");
  
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test0 - Test the Test itsself",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test - Test the Test itsself",
 				&TestIso::testIso_TestTheTest ));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test1 - Load Posfile",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test - Load Posfile",
 				&TestIso::testIso_LoadPosFile));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test2 - Load Rangefile",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test - Load Rangefile",
 				&TestIso::testIso_LoadRangeFile));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test3 - Access Ion Positions",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test - Access Ion Positions",
 				&TestIso::testIso_accessIonPositionsFromPos));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test4 - Access Ion IDs",
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestIso>("Test - Access Ion IDs",
 				&TestIso::testIso_accessIonIDs));
 
 		return suiteOfTests;
@@ -151,24 +148,6 @@ protected:
 		CPPUNIT_ASSERT_EQUAL(assert_ones,one_counter);
 
 
-
-	}
-
-
-	void testIso_visualizeMesh(){
-
-		pcl::PolygonMesh mesh;
-		pcl::io::loadPolygonFileOBJ("3depict_triangle_isosurface_mesh.obj",mesh);
-
-		boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-		viewer->setBackgroundColor (0, 0, 0);
-		viewer->addPolygonMesh(mesh,"meshes",0);
-		viewer->addCoordinateSystem (1.0);
-		viewer->initCameraParameters ();
-		while (!viewer->wasStopped ()){
-		    viewer->spinOnce (100);
-		    boost::this_thread::sleep (boost::posix_time::microseconds (100000));
-}
 
 	}
 

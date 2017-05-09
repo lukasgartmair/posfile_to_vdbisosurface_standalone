@@ -29,7 +29,6 @@ int main()
 #include <cppunit/ui/text/TestRunner.h>
  
 #include "iso_testsuite.h"
-#include "iso_functions.h"
 #include "CTF_testsuite.h"
 #include "CTF_functions.h"
 #include "vdb_testsuite.h"

@@ -1,4 +1,4 @@
-# include "vdb_functions.h"
+#include "vdb_functions.h"
 #include <math.h>
 #include <numeric> // for inner product
 #include <vector>
@@ -65,7 +65,7 @@ int roundUp(float numToRound, float multiple)
 		return numToRound + multiple - remainder;
 }
 
-coord GetVoxelIndex(coord *vec, float voxsize)
+coord getVoxelIndex(coord *vec, float voxsize)
 {
 	int cx = 0;
 	int cy = 0;
@@ -143,7 +143,7 @@ std::vector<std::vector<unsigned int> > splitQuadsToTriangles(std::vector<openvd
 	return triangles_from_splitted_quads;
 }
 
-	// combine normal and splitted triangles
+// combine normal and splitted triangles
 
 std::vector<std::vector<unsigned int> > concatenateTriangleVectors(std::vector<openvdb::Vec3I> triangles, std::vector<std::vector<unsigned int> > triangles_from_splitted_quads)
 {
@@ -170,7 +170,7 @@ std::vector<std::vector<unsigned int> > concatenateTriangleVectors(std::vector<o
 	return triangles_combined;
 }
 
-std::vector<std::vector<unsigned int> > IncreaseTriangleVertexIndicesByN(std::vector<std::vector<unsigned int> > triangles, int N)
+std::vector<std::vector<unsigned int> > increaseTriangleVertexIndicesByN(std::vector<std::vector<unsigned int> > triangles, int N)
 {
 	std::vector<std::vector<unsigned int> > triangles_indices_increased(triangles.size(), std::vector<unsigned int>(xyzs));
 	for (unsigned int i=0;i<triangles.size();++i)
@@ -182,7 +182,7 @@ std::vector<std::vector<unsigned int> > IncreaseTriangleVertexIndicesByN(std::ve
 	return triangles_indices_increased;
 }
 
-std::vector<std::vector<unsigned int> > DecreaseTriangleVertexIndicesByN(std::vector<std::vector<unsigned int> > triangles, int N)
+std::vector<std::vector<unsigned int> > decreaseTriangleVertexIndicesByN(std::vector<std::vector<unsigned int> > triangles, int N)
 {
 	std::vector<std::vector<unsigned int> > triangles_indices_decreased(triangles.size(), std::vector<unsigned int>(xyzs));
 	for (unsigned int i=0;i<triangles.size();++i)
@@ -195,15 +195,15 @@ std::vector<std::vector<unsigned int> > DecreaseTriangleVertexIndicesByN(std::ve
 }
 
 
-float GetLengthOfVector(std::vector<float> vec)
+float getLengthOfVector(std::vector<float> vec)
 {
 	float length = sqrt(vec[0]*vec[0]+vec[1]*vec[1]+vec[2]*vec[2]);
 	return length;
 }
 
-std::vector<float> NormalizeVector(std::vector<float> vec)
+std::vector<float> normalizeVector(std::vector<float> vec)
 {
-	float length = GetLengthOfVector(vec);
+	float length = getLengthOfVector(vec);
 	
 	std::vector<float> normal(xyzs);
 	
@@ -215,7 +215,7 @@ std::vector<float> NormalizeVector(std::vector<float> vec)
 }
 
 
-std::vector<float>  GetCrossProduct(std::vector<float> vec1, std::vector<float> vec2)
+std::vector<float>  getCrossProduct(std::vector<float> vec1, std::vector<float> vec2)
 {
 	//http://www.cplusplus.com/forum/general/77959/
 
@@ -229,7 +229,7 @@ std::vector<float>  GetCrossProduct(std::vector<float> vec1, std::vector<float> 
 	return crossproduct;
 }
 
-std::vector<std::vector<float> > ComputeTriangleNormalsVDB(std::vector<openvdb::Vec3s> points, std::vector<std::vector<unsigned int> > triangles)
+std::vector<std::vector<float> > computeTriangleNormalsVDB(std::vector<openvdb::Vec3s> points, std::vector<std::vector<unsigned int> > triangles)
 {
 	
 	unsigned int number_of_triangles = triangles.size();
@@ -253,9 +253,9 @@ std::vector<std::vector<float> > ComputeTriangleNormalsVDB(std::vector<openvdb::
 		vec2[2] = points[triangles[i][2]].z() - points[triangles[i][0]].z();
 		
 		// calculation
-		crossproduct = GetCrossProduct(vec1,vec2);
+		crossproduct = getCrossProduct(vec1,vec2);
 		
-		normal = NormalizeVector(crossproduct);
+		normal = normalizeVector(crossproduct);
 		
 		// write
 		triangle_normals[i] = normal;
@@ -264,7 +264,7 @@ std::vector<std::vector<float> > ComputeTriangleNormalsVDB(std::vector<openvdb::
 
 }
 
-std::vector<std::vector<float> > ComputeTriangleNormals(std::vector<std::vector<float> > points, std::vector<std::vector<unsigned int> > triangles)
+std::vector<std::vector<float> > computeTriangleNormals(std::vector<std::vector<float> > points, std::vector<std::vector<unsigned int> > triangles)
 {
 	unsigned int number_of_triangles = triangles.size();
 	std::vector<std::vector<float> > triangle_normals(number_of_triangles, std::vector<float>(vertices_per_triangle));
@@ -287,9 +287,9 @@ std::vector<std::vector<float> > ComputeTriangleNormals(std::vector<std::vector<
 		vec2[2] = points[triangles[i][2]][2] - points[triangles[i][0]][2];
 		
 		// calculation
-		crossproduct = GetCrossProduct(vec1,vec2);
+		crossproduct = getCrossProduct(vec1,vec2);
 		
-		normal = NormalizeVector(crossproduct);
+		normal = normalizeVector(crossproduct);
 		
 		// write
 		
@@ -300,7 +300,7 @@ std::vector<std::vector<float> > ComputeTriangleNormals(std::vector<std::vector<
 }
 
 
-std::vector<std::vector<float> >  ComputeVertexNormals(std::vector<std::vector<unsigned int> > triangles, std::vector<openvdb::Vec3s> points, std::vector<std::vector<float> > triangle_normals)
+std::vector<std::vector<float> >  computeVertexNormals(std::vector<std::vector<unsigned int> > triangles, std::vector<openvdb::Vec3s> points, std::vector<std::vector<float> > triangle_normals)
 {
 	std::vector<std::vector<float> > vertex_normals(points.size(), std::vector<float>(xyzs));
 	//average the normals of all the faces that share a triangle vertex
@@ -325,12 +325,12 @@ std::vector<std::vector<float> >  ComputeVertexNormals(std::vector<std::vector<u
 	
 	for (unsigned int i=0;i<vertex_normals.size();++i) 	
 	{
-		vertex_normals[i] = NormalizeVector(vertex_normals[i]);
+		vertex_normals[i] = normalizeVector(vertex_normals[i]);
 	}
 	return vertex_normals;
 }
 
-std::vector<float> ComputeTriangleAreas(std::vector<openvdb::Vec3s> points, std::vector<std::vector<unsigned int> > triangles)
+std::vector<float> computeTriangleAreas(std::vector<openvdb::Vec3s> points, std::vector<std::vector<unsigned int> > triangles)
 {
 // http://math.stackexchange.com/questions/128991/how-to-calculate-area-of-3d-triangle
 //Say you have 3 points A,B,C. Find the angle between AB and AC using dot product (i.e. AB⋅AC=|AB||AC|cosθ) and then you can find the area of the triangle using 
@@ -358,10 +358,10 @@ std::vector<float> ComputeTriangleAreas(std::vector<openvdb::Vec3s> points, std:
 
 		std::vector<float> crossproduct(xyzs);
 
-		crossproduct = GetCrossProduct(P12, P13);
+		crossproduct = getCrossProduct(P12, P13);
 		
 		float area_of_parallelogram = 0;
-		area_of_parallelogram = GetLengthOfVector(crossproduct);
+		area_of_parallelogram = getLengthOfVector(crossproduct);
 
 		float triangle_area = 0.5 * area_of_parallelogram;
 
