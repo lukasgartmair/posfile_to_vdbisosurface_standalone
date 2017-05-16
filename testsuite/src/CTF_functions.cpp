@@ -14,9 +14,9 @@ namespace CTF{
 	const unsigned int number_of_vertices = 8;
 	const unsigned int xyzs = 3;
 
-std::vector<std::vector<double> > initializeCubeVertices(double xmin, double ymin, double zmin)
+std::vector<std::vector<float> > initializeCubeVertices(float xmin, float ymin, float zmin)
 {
-	std::vector<std::vector<double> > vertices(number_of_vertices, std::vector<double>(xyzs));
+	std::vector<std::vector<float> > vertices(number_of_vertices, std::vector<float>(xyzs));
 
 	vertices[0][0] = xmin;
 	vertices[0][1] = ymin;
@@ -53,10 +53,10 @@ std::vector<std::vector<double> > initializeCubeVertices(double xmin, double ymi
 	return vertices;
 }
 
-std::vector<double> projectAtompositionToUnitvoxel(std::vector<double> atom_position, double voxel_size)
+std::vector<float> projectAtompositionToUnitvoxel(std::vector<float> atom_position, float voxel_size)
 {
-	std::vector<double> fractional_position_in_voxel(xyzs);
-	std::vector<double> atom_position_in_unit_voxel(xyzs);
+	std::vector<float> fractional_position_in_voxel(xyzs);
+	std::vector<float> atom_position_in_unit_voxel(xyzs);
 	
 	for (unsigned int i=0;i<fractional_position_in_voxel.size();++i)
 	{
@@ -78,10 +78,10 @@ std::vector<double> projectAtompositionToUnitvoxel(std::vector<double> atom_posi
 	return atom_position_in_unit_voxel;
 }
 
-bool checkVertexCornerCoincidence(std::vector<double> atom_position)
+bool checkVertexCornerCoincidence(std::vector<float> atom_position)
 {
 	bool conincidence = false;
-	std::vector<std::vector<double> > vertices = initializeCubeVertices();
+	std::vector<std::vector<float> > vertices = initializeCubeVertices();
 	for (unsigned int i=0;i<vertices.size();++i)
 	{
 		if (atom_position[0] == vertices[i][0] && (atom_position[1] == vertices[i][1] && (atom_position[2] == vertices[i][2])))
@@ -92,10 +92,10 @@ bool checkVertexCornerCoincidence(std::vector<double> atom_position)
 	return conincidence;
 }
 
-std::vector<double> handleVertexCornerCoincidence(std::vector<double> atom_position)
+std::vector<float> handleVertexCornerCoincidence(std::vector<float> atom_position)
 {
-	std::vector<double> normalized_voxel_contributions(number_of_vertices);
-	std::vector<std::vector<double> > vertices = initializeCubeVertices();
+	std::vector<float> normalized_voxel_contributions(number_of_vertices);
+	std::vector<std::vector<float> > vertices = initializeCubeVertices();
 	for (unsigned int i=0;i<vertices.size();++i)
 	{
 		if (atom_position[0] == vertices[i][0] && (atom_position[1] == vertices[i][1] && (atom_position[2] == vertices[i][2])))
@@ -106,19 +106,19 @@ std::vector<double> handleVertexCornerCoincidence(std::vector<double> atom_posit
 	return normalized_voxel_contributions;
 }
 
-std::vector<double> calcSubvolumes(std::vector<double> atom_position)
+std::vector<float> calcSubvolumes(std::vector<float> atom_position)
 {
-	std::vector<std::vector<double> > vertices = initializeCubeVertices();
+	std::vector<std::vector<float> > vertices = initializeCubeVertices();
 
-	std::vector<double> volumes_of_subcuboids;
+	std::vector<float> volumes_of_subcuboids;
 	for (int i=0;i<vertices.size();++i)
 	{
 		// the initialization with one instead of zero makes the iterative multiplication possible
-		double volume_subcuboid = 1; 
+		float volume_subcuboid = 1; 
 		
 		for (unsigned int j=0; j<xyzs;++j)
 		{
-			double edge_subcuboid = 0;
+			float edge_subcuboid = 0;
 			
 			if (vertices[i][j] == 1)
 			{
@@ -136,22 +136,22 @@ std::vector<double> calcSubvolumes(std::vector<double> atom_position)
 	return volumes_of_subcuboids;
 }
 
-std::vector<double> calcVoxelContributions(std::vector<double> volumes_of_subcuboids)
+std::vector<float> calcVoxelContributions(std::vector<float> volumes_of_subcuboids)
 {
-	std::vector<double> absolute_voxel_contributions;
-	std::vector<double> normalized_voxel_contributions;
+	std::vector<float> absolute_voxel_contributions;
+	std::vector<float> normalized_voxel_contributions;
 
 	// absolute contribution
 	for (unsigned int i=0;i<number_of_vertices;++i)
 	{
-		double absolute_contribution = 0;
+		float absolute_contribution = 0;
 
 		absolute_contribution = 1 / volumes_of_subcuboids[i];
 
 		absolute_voxel_contributions.push_back(absolute_contribution);
 	}
 	// sum of absolute contributions
-	double sum_of_all_absolute_contributions = 0;
+	float sum_of_all_absolute_contributions = 0;
 	for (unsigned int i=0;i<number_of_vertices;++i)
 	{
 		sum_of_all_absolute_contributions = sum_of_all_absolute_contributions + absolute_voxel_contributions[i];
@@ -159,28 +159,28 @@ std::vector<double> calcVoxelContributions(std::vector<double> volumes_of_subcub
 	// normalized contributions
 	for (unsigned int i=0;i<number_of_vertices;++i)
 	{
-		double normalized_contribution = 0;
+		float normalized_contribution = 0;
 		normalized_contribution = absolute_voxel_contributions[i] / sum_of_all_absolute_contributions;
 		normalized_voxel_contributions.push_back(normalized_contribution);
 	}
 	return normalized_voxel_contributions;
 }
 
-std::vector<double> HellmanContributions(std::vector<double> volumes_of_subcuboids)
+std::vector<float> HellmanContributions(std::vector<float> volumes_of_subcuboids)
 {
-	std::vector<double> voxel_contributions;
-	const double volume_unitvoxel = 1;
+	std::vector<float> voxel_contributions;
+	const float volume_unitvoxel = 1;
 	
 	// vertex with index 6 is opposed to vertex with index 0 and so on
 	// for c++11
 
-	std::vector<double> opposing_subcuboids_indices {6,7,4,5,2,3,0,1};
+	std::vector<int> opposing_subcuboids_indices = {6,7,4,5,2,3,0,1};
 
 	for (unsigned int i=0;i<number_of_vertices;++i)
 	{
 		// 1st get index of the opposing subcuboid
 		unsigned int index_of_opposed_subcuboid = opposing_subcuboids_indices[i];
-		double contribution = volumes_of_subcuboids[index_of_opposed_subcuboid] / volume_unitvoxel;
+		float contribution = volumes_of_subcuboids[index_of_opposed_subcuboid] / volume_unitvoxel;
 	
 		voxel_contributions.push_back(contribution);
 	}
@@ -188,10 +188,10 @@ std::vector<double> HellmanContributions(std::vector<double> volumes_of_subcuboi
 	return voxel_contributions;
 }
 
-std::vector<std::vector<double> > determineAdjacentVoxelVertices(std::vector<double> atom_position, double voxel_size)
+std::vector<std::vector<float> > determineAdjacentVoxelVertices(std::vector<float> atom_position, float voxel_size)
 {
-	std::vector<double> floored_voxel_indices(xyzs); 
-	std::vector<std::vector<double> > adjacent_voxel_indices;
+	std::vector<float> floored_voxel_indices(xyzs); 
+	std::vector<std::vector<float> > adjacent_voxel_indices;
 	
 	for (unsigned int i=0;i<atom_position.size();++i)
 	{	

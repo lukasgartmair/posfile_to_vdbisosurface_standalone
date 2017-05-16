@@ -124,7 +124,7 @@ protected:
 		
 		unsigned int zero_counter = 0;
 		unsigned int one_counter = 1;
-		unsigned int samplesize = 20000; // insert only up to ~ 4 mio
+		unsigned int samplesize = 20000; // insert only up to ~ 4 mio cause of the data type -> overflow
 		for (unsigned int i=0;i<samplesize;++i)
 		{	
 			AtomProbe::IonHit curr_hit;

@@ -1,5 +1,5 @@
-#ifndef VDBTEST1_H
-#define VDBTEST1_H
+#ifndef VDB_FUNCTIONS_H
+#define VDB_FUNCTIONS_H
 
 #include <openvdb/openvdb.h>
 #include <openvdb/Grid.h>
@@ -22,7 +22,7 @@ namespace VDB{
 // pure vdb functions
 openvdb::FloatGrid::Ptr loadData();
 openvdb::FloatGrid::Ptr createBlock(float radius, float value);
-std::vector<openvdb::Vec3s> volumeToMeshVertices(openvdb::FloatGrid::Ptr grid, double isovalue, double adaptivity);
+std::vector<openvdb::Vec3s> volumeToMeshVertices(openvdb::FloatGrid::Ptr grid, float isovalue, float adaptivity);
 
 // helper functions to process the vdb code
 int roundUp(float numToRound, float multiple);

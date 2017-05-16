@@ -33,7 +33,7 @@ openvdb::FloatGrid::Ptr createBlock(float radius, float value)
 	return grid;
 }
 
-std::vector<openvdb::Vec3s> volumeToMeshVertices(openvdb::FloatGrid::Ptr grid, double isovalue, double adaptivity)
+std::vector<openvdb::Vec3s> volumeToMeshVertices(openvdb::FloatGrid::Ptr grid, float isovalue, float adaptivity)
 {
 
 	openvdb::initialize();

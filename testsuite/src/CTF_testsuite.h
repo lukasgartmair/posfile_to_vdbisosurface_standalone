@@ -1,5 +1,5 @@
-#ifndef CTFTESTSUITE_H
-#define CTFTESTSUITE_H
+#ifndef CTF_TESTSUITE_H
+#define CTF_TESTSUITE_H
 
 #include <iostream>
 #include <cppunit/TestFixture.h>
@@ -14,11 +14,11 @@
 #include <vector>
 #include <algorithm>
 
-bool dequals(const double &a, const double &b)
+bool dequals(const float &a, const float &b)
 {
-	bool doubles_equal = false;
-	doubles_equal = !(std::fabs(a-b)>std::numeric_limits<double>::epsilon());
-	if(doubles_equal){return true;}
+	bool floats_equal = false;
+	floats_equal = !(std::fabs(a-b)>std::numeric_limits<float>::epsilon());
+	if(floats_equal){return true;}
 	else{return false;}
 }
 
@@ -51,8 +51,8 @@ public:
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Test the Test itsself",
 				&TestCTF::testCTF_TestTheTest ));
 
-		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Test double equality",
-				&TestCTF::testCTF_TestDoubleEquality ));
+		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Test float equality",
+				&TestCTF::testCTF_TestFloatEquality ));
 				
 		suiteOfTests->addTest(new CppUnit::TestCaller<TestCTF>("Test - Calculate Subvolumes of a unit cubes eight subcuboids",
 				&TestCTF::testCTF_CalculateSubvolumes));
@@ -87,11 +87,11 @@ protected:
 		CPPUNIT_ASSERT_EQUAL(3, u);
 	}
 
-	void testCTF_TestDoubleEquality()
+	void testCTF_TestFloatEquality()
 	{
 
-		double d1 {0.125};
-		double d2 {0.125};
+		float d1 {0.125};
+		float d2 {0.125};
 
 		bool same = false;
 		same = dequals(d1,d2);
@@ -103,7 +103,7 @@ protected:
 
 		same = dequals(d1,d2);
 
-		CPPUNIT_ASSERT(!same);
+		CPPUNIT_ASSERT(same);
 
 	}
 	
@@ -111,13 +111,13 @@ protected:
 	{	
 
 		// initial atom position
-		std::vector<double> atom_position(xyzs);
+		std::vector<float> atom_position(xyzs);
 		std::fill(atom_position.begin(), atom_position.end(),0.5);
 
-		std::vector<double> volumes_of_subcuboids(number_of_subvolumes);
+		std::vector<float> volumes_of_subcuboids(number_of_subvolumes);
 		volumes_of_subcuboids = CTF::calcSubvolumes(atom_position);
 	
-		std::vector<double> assertion_subvolumes(number_of_subvolumes);
+		std::vector<float> assertion_subvolumes(number_of_subvolumes);
 		std::fill(assertion_subvolumes.begin(), assertion_subvolumes.end(),0.125);
 
 		bool assertion_equal = false;
@@ -142,13 +142,13 @@ protected:
 	
 	void testCTF_CalculateVoxelContributions() 
 	{	
-		std::vector<double> test_subvolumes(number_of_subvolumes); 
+		std::vector<float> test_subvolumes(number_of_subvolumes); 
 		std::fill(test_subvolumes.begin(), test_subvolumes.end(),0.125);
 		
-		std::vector<double> contributions_of_subcuboids;		
+		std::vector<float> contributions_of_subcuboids;		
 		contributions_of_subcuboids = CTF::calcVoxelContributions(test_subvolumes);
 	
-		std::vector<double> assertion_contributions(number_of_subvolumes);
+		std::vector<float> assertion_contributions(number_of_subvolumes);
 		std::fill(assertion_contributions.begin(), assertion_contributions.end(),0.125);
 
 		bool assertion_equal = false;
@@ -176,14 +176,14 @@ protected:
 	
 	void testCTF_ProjectAtompositionToUnitvoxel()
 	{
-		std::vector<double> atom_position {0.5, 0.5, 0.5};
-		std::vector<double> unit_position(xyzs);
-		double voxel_size = 1;
+		std::vector<float> atom_position {0.5, 0.5, 0.5};
+		std::vector<float> unit_position(xyzs);
+		float voxel_size = 1;
 
-		std::vector<double> position_in_unit_voxel(xyzs);
+		std::vector<float> position_in_unit_voxel(xyzs);
 		position_in_unit_voxel = CTF::projectAtompositionToUnitvoxel(atom_position, voxel_size);
 
-		std::vector<double> assert_position(xyzs);
+		std::vector<float> assert_position(xyzs);
 		std::fill(assert_position.begin(), assert_position.end(),0.5);
 		bool assertion_equal = false;
 		assertion_equal = compareVectors(assert_position, position_in_unit_voxel);
@@ -219,7 +219,7 @@ protected:
 		
 /*
 
-		//the doubles equal check fails here obvioulsy?!
+		//the DOUBLES equal check fails here obvioulsy?!
 		
 		atom_position = {-2.5, -2.5, -2.5};
 		voxel_size = 3;
@@ -343,12 +343,12 @@ protected:
 	void testCTF_DetermineAdjacentVoxelVertices()
 	{
 		// positive atom position
-		std::vector<double>atom_position {2.5, 2.5, 2.5};
-		double voxel_size = 1;
+		std::vector<float>atom_position {2.5, 2.5, 2.5};
+		float voxel_size = 1;
 
-		std::vector<std::vector<double> > assert_voxel_vertices = CTF::initializeCubeVertices(2,2,2);
+		std::vector<std::vector<float> > assert_voxel_vertices = CTF::initializeCubeVertices(2,2,2);
 		
-		std::vector<std::vector<double> > surr_voxel_vertices = CTF::determineAdjacentVoxelVertices(atom_position, voxel_size);
+		std::vector<std::vector<float> > surr_voxel_vertices = CTF::determineAdjacentVoxelVertices(atom_position, voxel_size);
 		
 		for (int i=0;i<assert_voxel_vertices.size();i++)
 		{
@@ -421,7 +421,7 @@ protected:
 			}
 		}
 
-		// negative atom position and double voxel size
+		// negative atom position and float voxel size
 	
 		atom_position = {-1.7, -1.7, -1.7};
 		voxel_size = 1.5;
@@ -437,7 +437,7 @@ protected:
 			}
 		}
 
-		// negative atom position and double voxel size and arbitrary positions
+		// negative atom position and float voxel size and arbitrary positions
 	
 		atom_position = {-1.9, -0.1, 0.7};
 		voxel_size = 1.5;
@@ -453,7 +453,7 @@ protected:
 			}
 		}
 	
-		// negative atom position and double voxel size and arbitrary positions
+		// negative atom position and float voxel size and arbitrary positions
 	
 		atom_position = {-2.9, -0.1, 0.7};
 		voxel_size = 2;
@@ -496,14 +496,14 @@ protected:
 	// alternative ctf from http://nucapt.northwestern.edu/refbase/files/UM_95_199.pdf
 	// the contribution is the volume of the opposing subcuboid divided by the total volume
 
-		double voxel_size =  1;
-		std::vector<double> volumes_of_subcuboids(number_of_subcuboids);
-		std::vector<double> vertex_contributions(number_of_subcuboids);
-		std::vector<double> atom_position {0.5, 0.5, 0.5};
-		std::vector<double> assertion_contributions(number_of_subcuboids);
+		float voxel_size =  1;
+		std::vector<float> volumes_of_subcuboids(number_of_subcuboids);
+		std::vector<float> vertex_contributions(number_of_subcuboids);
+		std::vector<float> atom_position {0.5, 0.5, 0.5};
+		std::vector<float> assertion_contributions(number_of_subcuboids);
 		std::fill(assertion_contributions.begin(), assertion_contributions.end(),0.125);
 	
-		std::vector<double> position_in_unit_voxel(xyzs);
+		std::vector<float> position_in_unit_voxel(xyzs);
 		position_in_unit_voxel = CTF::projectAtompositionToUnitvoxel(atom_position, voxel_size);
 	
 		bool vertex_corner_coincidence = CTF::checkVertexCornerCoincidence(position_in_unit_voxel);

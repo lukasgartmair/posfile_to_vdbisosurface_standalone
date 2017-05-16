@@ -1,3 +1,6 @@
+#ifndef VDB_TESTSUITE_H
+#define VDB_TESTSUITE_H
+
 
 #include <iostream>
 #include <cppunit/TestFixture.h>
@@ -121,7 +124,7 @@ public:
  
 protected:
 
-
+	const unsigned int xyzs = 3;
 
 	void testOpenVDB_TestTheTest() {
 		int x = 1;
@@ -168,7 +171,7 @@ protected:
 		// that means there should be division by zero
 		// another thing occured here i did not see before:
 		// instead of -nf from 0/0 division inf occurs from the division 
-		// so i have to check both cases http://stackoverflow.com/questions/4095337/how-to-check-for-inf-and-or-nf-in-a-double-variable
+		// so i have to check both cases http://stackoverflow.com/questions/4095337/how-to-check-for-inf-and-or-nf-in-a-float-variable
 		// with std::isfinite(x) --> if inf or -nf is finite results in false
 		openvdb::initialize();
 		openvdb::FloatGrid::Ptr small_grid = openvdb::FloatGrid::create(/*background value=*/0);
@@ -314,10 +317,9 @@ protected:
 		// this test should check how this is possible
 		// i.e. not only to check the amount but the content!
 		int non_finites_counter = 0;
-		int xyzs = 3;
-		for (int i=0;i<vertices.size();i++)
+		for (unsigned int i=0;i<vertices.size();i++)
 		{
-			for (int j=0;j<xyzs;j++)
+			for (unsigned int j=0;j<xyzs;j++)
 			{
 			    if (std::isfinite(vertices[i][j]) == false)
 				{	
@@ -335,9 +337,9 @@ protected:
 		
 		vertices[0][0] = 0.0 / 0.0; // which results in -nan
  		
-		for (int i=0;i<vertices.size();i++)
+		for (unsigned int i=0;i<vertices.size();i++)
 		{
-			for (int j=0;j<xyzs;j++)
+			for (unsigned int j=0;j<xyzs;j++)
 			{
 			    if (std::isfinite(vertices[i][j]) == false)
 				{	
@@ -448,17 +450,16 @@ protected:
 		grid = createBlock(10,1);	
 		std::vector<openvdb::Vec3s> vertices;
 		vertices = volumeToMeshVertices(grid, 0.5, 0);
-		
-	  	int xyzs = 3;
+
 		std::vector<std::vector<float> > standard_points(vertices.size(), std::vector<float>(xyzs));
 
 		standard_points = convertOpenVDBVectorToStandardVector(vertices);
 		
-		for (int i=0;i<vertices.size();i++)
+		for (unsigned int i=0;i<vertices.size();i++)
 		{
-			CPPUNIT_ASSERT_EQUAL(vertices[i].x(), standard_points[i][0]);
-			CPPUNIT_ASSERT_EQUAL(vertices[i].y(), standard_points[i][1]);
-			CPPUNIT_ASSERT_EQUAL(vertices[i].z(), standard_points[i][2]);
+			CPPUNIT_ASSERT_DOUBLES_EQUAL(vertices[i].x(), standard_points[i][0],0.01);
+			CPPUNIT_ASSERT_DOUBLES_EQUAL(vertices[i].y(), standard_points[i][1],0.01);
+			CPPUNIT_ASSERT_DOUBLES_EQUAL(vertices[i].z(), standard_points[i][2],0.01);
 		}
 	
 	}
@@ -551,8 +552,9 @@ protected:
 		quads[0][3] = 3;
 		
 		triangles_from_splitted_quads = splitQuadsToTriangles(points, quads);
-		int tri_size = triangles_from_splitted_quads.size();
-		CPPUNIT_ASSERT_EQUAL(2,tri_size);
+		unsigned int tri_size = triangles_from_splitted_quads.size();
+		unsigned int assert_size = 2;
+		CPPUNIT_ASSERT_EQUAL(assert_size,tri_size);
 		
 		//check the contents
 		std::vector<std::vector<unsigned int> > assert_triangles(tri_size, std::vector<unsigned int>(xyzs));
@@ -564,7 +566,7 @@ protected:
 		assert_triangles[1][1] = 2; 
 		assert_triangles[1][2] = 3; 	
 		
-		for (int i=0;i<tri_size;i++)
+		for (unsigned int i=0;i<tri_size;i++)
 		{
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_triangles[i][0], triangles_from_splitted_quads[i][0],0.01);
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_triangles[i][1], triangles_from_splitted_quads[i][1],0.01);
@@ -598,20 +600,20 @@ protected:
 		//std::cout << triangles_combined[triangles.size()][2] << std::endl; 
 
 		// check the amount
-		int tri_size = triangles_combined.size();
-		int assert_size = (quads.size()*2) + triangles.size();
+		unsigned int tri_size = triangles_combined.size();
+		unsigned int assert_size = (quads.size()*2) + triangles.size();
 		CPPUNIT_ASSERT_EQUAL(assert_size, tri_size);
 
 		//check the contents
 		
-		for (int i=0;i<triangles.size();i++)
+		for (unsigned int i=0;i<triangles.size();i++)
 		{
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(triangles[i][0], triangles_combined[i][0],0.01);
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(triangles[i][1], triangles_combined[i][1],0.01);
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(triangles[i][2], triangles_combined[i][2],0.01);
 		}
 		
-		for (int i=triangles.size();i<2*quads.size()+triangles.size();i++)
+		for (unsigned int i=triangles.size();i<2*quads.size()+triangles.size();i++)
 		{
 			int shifted_index = i - triangles.size();
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(triangles_from_splitted_quads[shifted_index][0], triangles_combined[i][0],0.01);
@@ -646,7 +648,7 @@ protected:
 		result_triangles = increaseTriangleVertexIndicesByN(triangles, N);
 		
 		//check the contents
-		for (int i=0;i<tri_size;i++)
+		for (unsigned int i=0;i<tri_size;i++)
 		{
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_triangles[i][0], result_triangles[i][0],0.01);
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_triangles[i][1], result_triangles[i][1],0.01);
@@ -656,8 +658,7 @@ protected:
 	
 	void testOpenVDB_DecreaseTrianglesVertexIndices()
 	{
-		int tri_size = 2;
-		int xyzs = 3;
+		const unsigned int tri_size = 2;
 		std::vector<std::vector<unsigned int> > triangles(tri_size, std::vector<unsigned int>(xyzs));
 	
 		triangles[0][0] = 1; 
@@ -681,7 +682,7 @@ protected:
 		result_triangles = decreaseTriangleVertexIndicesByN(triangles, N);
 		
 		//check the contents
-		for (int i=0;i<tri_size;i++)
+		for (unsigned int i=0;i<tri_size;i++)
 		{
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_triangles[i][0], result_triangles[i][0],0.01);
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_triangles[i][1], result_triangles[i][1],0.01);
@@ -692,8 +693,7 @@ protected:
 	void testOpenVDB_ComputeVertexNormals()
 	{
 
-		int tri_size = 2;
-		int xyzs = 3;
+		const unsigned int tri_size = 2;
 		std::vector<std::vector<unsigned int> > triangles(tri_size, std::vector<unsigned int>(xyzs));
 		
 		triangles[0][0] = 0; 
@@ -739,7 +739,7 @@ protected:
 
 	
 		// check the amount
-		int size_normals = 4;
+		const unsigned int size_normals = 4;
 		CPPUNIT_ASSERT_DOUBLES_EQUAL(size_normals, vertex_normals.size(),0.01);
 		// check the content
 		/*
@@ -762,8 +762,7 @@ protected:
 	void testOpenVDB_ComputeTriangleNormals()
 	{
 	
-		int tri_size = 2;
-		int xyzs = 3;
+		const unsigned int tri_size = 2;
 		std::vector<std::vector<float> > normals;
 		
 		// vdb version
@@ -955,12 +954,10 @@ protected:
 		grid = createBlock(2,1);
 		openvdb::FloatGrid::Accessor accessor = grid->getAccessor();
 
-		const int xyzs = 3;
-
 		std::vector<std::vector<float> > active_voxel_indices(grid->activeVoxelCount(), std::vector<float>(xyzs));
 		openvdb::Coord hkl;
 
-		int voxel_counter = 0;
+		unsigned int voxel_counter = 0;
 		for (openvdb::FloatGrid::ValueOnIter iter = grid->beginValueOn(); iter; ++iter)
 		{   
 	    			iter.setValue(0.0);
@@ -984,12 +981,10 @@ protected:
 		grid = createBlock(2,1);
 		openvdb::FloatGrid::Accessor accessor = grid->getAccessor();
 
-		const int xyzs = 3;
-
 		std::vector<std::vector<float> > active_voxel_indices(grid->activeVoxelCount(), std::vector<float>(xyzs));
 		openvdb::Coord hkl;
 
-		int voxel_counter = 0;
+		unsigned int voxel_counter = 0;
 		for (openvdb::FloatGrid::ValueOnIter iter = grid->beginValueOn(); iter; ++iter)
 		{   
 	    			iter.setValue(0.0);
@@ -1047,8 +1042,8 @@ protected:
 		openvdb::math::Transform::Ptr trans = openvdb::math::Transform::createLinearTransform(voxelsize_levelset);
 		openvdb::FloatGrid::Ptr sdf = openvdb::tools::meshToSignedDistanceField<openvdb::FloatGrid>(*trans, points, triangles, quads, ex_bandwidth, in_bandwidth);
 
-		int active_voxels_meshgrid = grid->activeVoxelCount();
-		int active_voxels_sdf = sdf->activeVoxelCount();
+		unsigned int active_voxels_meshgrid = grid->activeVoxelCount();
+		unsigned int active_voxels_sdf = sdf->activeVoxelCount();
 
 		//std::cout << " active_voxels_meshgrid" << " = " << active_voxels_meshgrid << std::endl;
 		//std::cout << " active_voxels_sdf" << " = " << active_voxels_sdf << std::endl;
@@ -1082,7 +1077,7 @@ protected:
 
 	void testOpenVDB_Sort()
 	{
-		std::vector<int> vec = {3,1,2};
+		std::vector<unsigned int> vec = {3,1,2};
 
 		std::sort(vec.begin(), vec.end());
 
@@ -1097,14 +1092,14 @@ protected:
 
 		// does the summarization of the shells work as expected?
 
-		int number_of_proximity_ranges = 3;
+		const unsigned int number_of_proximity_ranges = 3;
 
 		std::vector<float> proximity_ranges_ends = {-0.5, 2, 5};
 
 		std::vector<float> shell_content(number_of_proximity_ranges);
 
-		int proximity_range_index = 0;
-		for (int i=0;i<unique_distances.size();i++)
+		unsigned int proximity_range_index = 0;
+		for (unsigned int i=0;i<unique_distances.size();i++)
 		{
 			if (proximity_range_index < number_of_proximity_ranges)
 			{
@@ -1128,14 +1123,14 @@ protected:
 	void testOpenVDB_RearrangeProximities()
 	{
 		
-		int number_of_proximity_ranges = 5;
+		const unsigned int number_of_proximity_ranges = 5;
 		float shell_width = 0.5;
 
 		std::vector<float> proximity_ranges_ends = {-1,-0.5,0,0.5,1};
 
 		std::vector<float> proximity_ranges_plotting(number_of_proximity_ranges);
 
-		for (int i=0;i<proximity_ranges_plotting.size();i++)
+		for (unsigned int i=0;i<proximity_ranges_plotting.size();i++)
 		{
 			if (proximity_ranges_ends[i] <= 0)
 			{
@@ -1147,14 +1142,14 @@ protected:
 			}			
 		}		
 
-		for (int i=0;i<proximity_ranges_plotting.size();i++)
+		for (unsigned int i=0;i<proximity_ranges_plotting.size();i++)
 		{		
 			std::cout << " proximity_ranges_plotting [i] " << " = " << proximity_ranges_plotting[i] << std::endl;	
 		}
 
 		std::vector<float> assert_ranges_ends = {-1.5,-1,-0.5,0.5,1};
 
-		for (int i=0;i<proximity_ranges_plotting.size();i++)
+		for (unsigned int i=0;i<proximity_ranges_plotting.size();i++)
 		{		
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_ranges_ends[i], proximity_ranges_plotting[i], 0.01);	
 		}
@@ -1200,7 +1195,7 @@ protected:
 		std::vector<float> proximity_ranges_ends;
 		std::vector<float> proximity_ranges_centers;
 
-		int rescue_counter = 10000;
+		const unsigned int rescue_counter = 10000;
 		float max_distance = 2;
 		float shell_width = 1;
 		float current_end = shell_width/2;
@@ -1208,7 +1203,7 @@ protected:
 		proximity_ranges_ends.push_back(current_end);
 		proximity_ranges_ends.push_back(-current_end);
 
-		int counter = 0;
+		unsigned int counter = 0;
 		while (current_end < max_distance)
 		{	
 			proximity_ranges_ends.push_back(current_end + shell_width);
@@ -1247,12 +1242,12 @@ protected:
 		std::vector<float> assert_ranges_ends = {-2.5,-1.5,-0.5,0.5,1.5,2.5};
 		std::vector<float> assert_ranges_centers = {-2,-1,0,1,2};
 
-		for (int i=0;i<assert_ranges_ends.size();i++)
+		for (unsigned int i=0;i<assert_ranges_ends.size();i++)
 		{
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_ranges_ends[i], proximity_ranges_ends[i], 0.01);
 		}
 
-		for (int i=0;i<assert_ranges_centers.size();i++)
+		for (unsigned int i=0;i<assert_ranges_centers.size();i++)
 		{
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(assert_ranges_centers[i], proximity_ranges_centers[i], 0.01);
 		}
@@ -1261,20 +1256,19 @@ protected:
 	void testOpenVDB_ShellCheck()
 	{ 
 
-		
 		std::vector<float> proximity_ranges_limits {-2.5,-1.5,-0.5,0.5,1.5,2.5};
 		std::vector<float> assert_ranges_centers {-2,-1,0,1,2};
 		std::vector<float> shell_content(assert_ranges_centers.size());
 
 		std::vector<float> unique_distances {-4,-2.3,-2.0,-1.4,-1.1,-0.3,0.2,1.1,1.4,2.1,2.3,3.0};
 		std::vector<float> voxel_content;
-		for (int i=0;i<unique_distances.size();i++)
+		for (unsigned int i=0;i<unique_distances.size();i++)
 		{
 			voxel_content.push_back(1);
 		}
 
-		int proximity_range_index = 0;
-		for (int i=0;i<unique_distances.size();i++)
+		unsigned int proximity_range_index = 0;
+		for (unsigned int i=0;i<unique_distances.size();i++)
 		{
 			
 			if ((unique_distances[i] >= proximity_ranges_limits[proximity_ranges_limits.size()-1]))
@@ -1294,7 +1288,7 @@ protected:
 
 			}	
 		}
-		for (int i=0;i<shell_content.size();i++)
+		for (unsigned int i=0;i<shell_content.size();i++)
 		{
 			std::cout << " shell_content [i] " << " = " << shell_content[i] << std::endl;
 			CPPUNIT_ASSERT_DOUBLES_EQUAL(2,shell_content[i],0.01);
@@ -1304,3 +1298,5 @@ protected:
 	}
 
 };
+
+#endif

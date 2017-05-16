@@ -26,7 +26,6 @@
 #include "../testsuite/src/vdb_functions.h"
 #include <string>
 #include <openvdb/openvdb.h>
-//#include <openvdb/math/Maps.h>
 #include <openvdb/Grid.h>
 #include <openvdb/tools/Composite.h>
 #include <openvdb/tools/VolumeToMesh.h>
@@ -77,8 +76,8 @@ int main()
 
 	const unsigned int numerator_id = 1;
 
-	// positions size will have several mio - which for counter type to store that 
-	for (double i=0;i<posIons.size();++i)
+	// positions size will have several mio
+	for (float i=0;i<posIons.size();++i)
 	{
 	
 		AtomProbe::Point3D current_position;
@@ -89,19 +88,19 @@ int main()
 
 		unsigned int current_ionID = rng.getIonID(current_hit);
 
-		std::vector<double> atom_position(xyzs); 
+		std::vector<float> atom_position(xyzs); 
 		for (unsigned int j=0;j<xyzs;++j)
 		{
 			atom_position[j] = current_position[j];
 		}
 
 		// 1st step - project the current atom position to unit voxel i.e. from 0 to 1
-		std::vector<double> position_in_unit_voxel;
+		std::vector<float> position_in_unit_voxel;
 		position_in_unit_voxel = CTF::projectAtompositionToUnitvoxel(atom_position, voxelsize);
 
 		// 2nd step - determine each contribution to the adjecent 8 voxels outgoining from the position in the unit voxel
-		std::vector<double> volumes_of_subcuboids;
-		std::vector<double> contributions_to_adjacent_voxels;
+		std::vector<float> volumes_of_subcuboids;
+		std::vector<float> contributions_to_adjacent_voxels;
 		bool vertex_corner_coincidence = false;
 
 		vertex_corner_coincidence = CTF::checkVertexCornerCoincidence(position_in_unit_voxel);
@@ -118,13 +117,13 @@ int main()
 		}
 
 		// 3rd step - determine the adjacent voxel indices in the actual grid
-		std::vector<std::vector<double> > adjacent_voxel_vertices;
+		std::vector<std::vector<float> > adjacent_voxel_vertices;
 		adjacent_voxel_vertices = CTF::determineAdjacentVoxelVertices(atom_position, voxelsize);
 
 		// 4th step - assign each of the 8 adjacent voxels the corresponding contribution that results from the atom position in the unit voxel
 
 		const unsigned int number_of_adjacent_voxels = 8;
-		std::vector<double> current_voxel_index;
+		std::vector<float> current_voxel_index;
 		for (unsigned int k=0;k<number_of_adjacent_voxels;++k)
 		{
 
@@ -154,8 +153,8 @@ int main()
 
 	calculation_result_grid = numerator_grid->deepCopy();
 
-	//check for negative nans and infs introduced by the division
-	//set them to zero in order not to obtain nan mesh coordinates
+	// check for negative nans and infs introduced by the division
+	// set them to zero in order not to obtain nan mesh coordinates
 
 	for (openvdb::FloatGrid::ValueAllIter iter = calculation_result_grid->beginValueAll(); iter; ++iter)
 	{   
@@ -195,7 +194,7 @@ int main()
 	}	
 
 	// create a triangular mesh
-	double number_of_splitted_triangles = 2*quads.size();
+	unsigned int number_of_splitted_triangles = 2*quads.size();
 	std::vector<std::vector<unsigned int> > triangles_from_splitted_quads(number_of_splitted_triangles, std::vector<unsigned int>(xyzs));
 
 	triangles_from_splitted_quads = VDB::splitQuadsToTriangles(points, quads);
